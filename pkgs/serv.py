@@ -69,6 +69,18 @@ class SERV:
                 c += 1
         return True if (c > 0) else False
 
+    def __a_whole_year(self, dtrng):
+        C0 = DATE(dtrng[0]).D == 1
+        C1 = DATE(dtrng[0]).M == 1
+        C2 = DATE(dtrng[1]).D == 31
+        C3 = DATE(dtrng[1]).M == 12
+        C4 = DATE(dtrng[0]).Y == DATE(dtrng[1]).Y
+        if C0 and C1 and C2 and C3 and C4:
+            B = True
+        else:
+            B = False
+        return B
+
     def __sigrh(self):
         L = []
         for document in os.listdir("data/pdfs/sig"):
@@ -93,36 +105,34 @@ class SERV:
                 n = len(X) // 2
                 for i in range(n):
                     dtrng = [X[2 * i], X[2 * i + 1]]
-                    COND0 = DATE(dtrng[0]).D == 1
-                    COND1 = DATE(dtrng[0]).M == 1
-                    COND2 = DATE(dtrng[1]).D == 31
-                    COND3 = DATE(dtrng[1]).M == 12
-                    COND4 = DATE(dtrng[0]).Y == DATE(dtrng[1]).Y
-                    if not (COND0 and COND1 and COND2 and COND3 and COND4):
+                    if not self.__a_whole_year(dtrng):
                         N[siape].append(dtrng)
         return N
 
     def __seime(self):
         M = {}
+        T = ""
         for document in os.listdir("data/pdfs/sei"):
             if document.endswith(".pdf"):
                 with pdfplumber.open(f"data/pdfs/sei/{document}") as document:
                     for page in document.pages:
-                        text = unidecode(page.extract_text().lower())
-                        N = REGX["seime"].findall(text)
-                        if N:
-                            for x in N:
-                                siape = self.__siape(x[0])
-                                if siape not in M.keys():
-                                    M[siape] = []
-                                if x[2] in self.__table():
-                                    M[siape].append(x[2])
-                                else:
-                                    self.__trash(x[0:4])
-        N = {}
+                        T += unidecode(page.extract_text().lower())
+        X = REGX["seime"].findall(T)
+        if X:
+            for x in X:
+                siape = self.__siape(x[0])
+                if siape:
+                    if siape not in M.keys():
+                        M[siape] = []
+                    if x[2] in self.__table():
+                        M[siape].append(x[2])
+                    else:
+                        self.__trash(x[0:4])
+                else:
+                    self.__trash(x[0:4])
         for siape in M.keys():
-            N[siape] = sorted(M[siape], key=lambda x: DATE(x).iso)
-        return N
+            M[siape] = sorted(M[siape], key=lambda x: DATE(x).iso)
+        return M
 
     def __staff(self, SIGRH, SEIME):
         staff = self.__cadre()
@@ -147,11 +157,11 @@ class SERV:
     def __sheet(self):
         Y = self.__cyear()
         S = self.staff
-        F = {siape: [S[siape]["fname"]] for siape in S.keys()}
-        G = {siape: S[siape]["cd"] for siape in S.keys()}
-        df = pd.DataFrame.from_dict(F).T
-        dg = pd.DataFrame.from_dict(G).T
+        A = {siape: [S[siape]["fname"]] for siape in S.keys()}
+        B = {siape: S[siape]["cd"] for siape in S.keys()}
+        da = pd.DataFrame.from_dict(A).T
+        db = pd.DataFrame.from_dict(B).T
         with pd.ExcelWriter("brew/freq.ods", engine="odf") as ods:
-            df.to_excel(ods, sheet_name="siape")
-            dg.to_excel(ods, sheet_name=f"{Y}")
-        return dg
+            da.to_excel(ods, sheet_name="siape")
+            db.to_excel(ods, sheet_name=f"{Y}")
+        return db

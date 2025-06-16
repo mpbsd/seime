@@ -7,7 +7,7 @@ REGX = {
         r"([/-]?)"
         r"(0[1-9]|1[0-2])"
         r"\2"
-        r"(20[0-9][0-9])"
+        r"(20[0-9]{2})"
         r"$"
     ),
     "siape": re.compile(r"\b[0-9]{6,}\b"),
@@ -19,20 +19,13 @@ REGX = {
         r"/"
         r"(?:0[1-9]|1[0-2])"
         r"/"
-        r"(?:20[0-9][0-9])"
+        r"(?:20[0-9]{2})"
         r"){2,}"
         r")"
     ),
     "seime": re.compile(
-        r"documento assinado eletronicamente por ([^,]+), ([^,]+), em"
-        r" ("
-        r"(?:0[1-9]|[12][0-9]|3[01])"
-        r"/"
-        r"(?:0[1-9]|1[0-2])"
-        r"/"
-        r"(?:20[0-9][0-9])"
-        r"),"
-        r" as ([0-9]{2}:[0-9]{2}),",
+        r"^documento assinado eletronicamente por\s([^,]+),\s([^,]+),\sem"
+        r"\s([^,]+),\sas\s([^,]+),\sconforme horario oficial de brasilia",
         re.MULTILINE,
     ),
 }
