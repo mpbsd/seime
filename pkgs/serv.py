@@ -70,7 +70,6 @@ class SERV:
         return True if (c > 0) else False
 
     def __sigrh(self):
-        Y = self.__cyear()
         L = []
         for document in os.listdir("data/pdfs/sig"):
             if document.endswith(".pdf"):
@@ -94,7 +93,12 @@ class SERV:
                 n = len(X) // 2
                 for i in range(n):
                     dtrng = [X[2 * i], X[2 * i + 1]]
-                    if dtrng != [f"01/01/{Y}", f"31/12/{Y}"]:
+                    COND0 = DATE(dtrng[0]).D == 1
+                    COND1 = DATE(dtrng[0]).M == 1
+                    COND2 = DATE(dtrng[1]).D == 31
+                    COND3 = DATE(dtrng[1]).M == 12
+                    COND4 = DATE(dtrng[0]).Y == DATE(dtrng[1]).Y
+                    if not (COND0 and COND1 and COND2 and COND3 and COND4):
                         N[siape].append(dtrng)
         return N
 
