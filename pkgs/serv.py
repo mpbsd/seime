@@ -111,12 +111,13 @@ class SERV:
 
     def __seime(self):
         M = {}
-        T = ""
+        S = ""
         for document in os.listdir("data/pdfs/sei"):
             if document.endswith(".pdf"):
                 with pdfplumber.open(f"data/pdfs/sei/{document}") as document:
                     for page in document.pages:
-                        T += unidecode(page.extract_text().lower())
+                        S += unidecode(page.extract_text().lower())
+        T = REGX["nproc"].sub(r"", S)
         X = REGX["seime"].findall(T)
         if X:
             for x in X:
@@ -138,7 +139,8 @@ class SERV:
         staff = self.__cadre()
         for siape in SIGRH.keys():
             if siape in staff.keys():
-                staff[siape]["break"] = SIGRH[siape]
+                for dtrng in SIGRH[siape]:
+                    staff[siape]["break"].append(dtrng)
         for siape in SEIME.keys():
             if siape in staff.keys():
                 staff[siape]["patch"] = SEIME[siape]
@@ -157,8 +159,8 @@ class SERV:
     def __sheet(self):
         Y = self.__cyear()
         S = self.staff
-        A = {siape: [S[siape]["fname"]] for siape in S.keys()}
-        B = {siape: S[siape]["cd"] for siape in S.keys()}
+        A = {k: [S[k]["fname"].title()] for k in S.keys()}
+        B = {S[k]["fname"].title(): S[k]["cd"] for k in S.keys()}
         da = pd.DataFrame.from_dict(A).T
         db = pd.DataFrame.from_dict(B).T
         with pd.ExcelWriter("brew/freq.ods", engine="odf") as ods:

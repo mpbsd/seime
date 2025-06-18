@@ -23,8 +23,12 @@ REGX = {
         r"){2,}"
         r")"
     ),
+    "nproc": re.compile(
+        r"lista de presenca (com direito a voz e voto)"
+        r"[0-9]+ sei [0-9]+\.[0-9]+/[0-9]+-[0-9]+ / pg\. [0-9]+"
+    ),
     "seime": re.compile(
-        r"^documento assinado eletronicamente por\s([^,]+),\s([^,]+),\sem"
+        r"documento assinado eletronicamente por\s([^,]+),\s([^,]+),\sem"
         r"\s([^,]+),\sas\s([^,]+),\sconforme horario oficial de brasilia",
         re.MULTILINE,
     ),
