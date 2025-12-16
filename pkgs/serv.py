@@ -143,17 +143,18 @@ class SERV:
                     staff[siape]["break"].append(dtrng)
         for siape in SEIME.keys():
             if siape in staff.keys():
-                staff[siape]["patch"] = SEIME[siape]
+                staff[siape]["usual"] = SEIME[siape]
         for siape in staff.keys():
             staff[siape]["cd"] = {}
             for dt in self.__table():
-                if dt in staff[siape]["patch"]:
+                C0 = self.__excused(staff[siape]["break"], dt)
+                C1 = dt in staff[siape]["patch"]
+                if dt in staff[siape]["usual"]:
                     staff[siape]["cd"][dt] = self.COD_PRE
+                elif C0 or C1:
+                    staff[siape]["cd"][dt] = self.COD_JUS
                 else:
-                    if self.__excused(staff[siape]["break"], dt):
-                        staff[siape]["cd"][dt] = self.COD_JUS
-                    else:
-                        staff[siape]["cd"][dt] = self.COD_AUS
+                    staff[siape]["cd"][dt] = self.COD_AUS
         return staff
 
     def __sheet(self):
