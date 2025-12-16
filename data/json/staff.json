@@ -1,7 +1,14 @@
 {
   "1010101": {
-    "fname": "jane doe",
-    "place": "professora",
+    "fname": "john doe",
+    "data de nascimento": "16/01/1980",
+    "admissao": "17/03/2005",
+    "cargo": "professor do magisterio superior",
+    "categoria": "docente",
+    "escolaridade": "doutorado",
+    "regime juridico": "estatutario",
+    "situacao": "ativo permanente",
+    "usual": [],
     "break": [],
     "patch": []
   }
