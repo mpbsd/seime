@@ -42,7 +42,7 @@ class SERV:
 
     def __siape(self, fname):
         staff = self.__cadre()
-        X = [k for k in staff.keys() if staff[k]["fname"] == fname.strip()]
+        X = [k for k in staff.keys() if staff[k]["nome"] == fname.strip()]
         if X:
             siape = X[0]
         else:
@@ -160,8 +160,8 @@ class SERV:
     def __sheet(self):
         Y = self.__cyear()
         S = self.staff
-        A = {k: [S[k]["fname"].title()] for k in S.keys()}
-        B = {S[k]["fname"].title(): S[k]["cd"] for k in S.keys()}
+        A = {k: [S[k]["nome"].title()] for k in S.keys()}
+        B = {S[k]["nome"].title(): S[k]["cd"] for k in S.keys()}
         da = pd.DataFrame.from_dict(A).T
         db = pd.DataFrame.from_dict(B).T
         with pd.ExcelWriter("brew/freq.ods", engine="odf") as ods:
