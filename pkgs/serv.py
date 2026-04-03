@@ -140,16 +140,16 @@ class SERV:
         for siape in SIGRH.keys():
             if siape in staff.keys():
                 for dtrng in SIGRH[siape]:
-                    staff[siape]["break"].append(dtrng)
+                    staff[siape]["ausencia"].append(dtrng)
         for siape in SEIME.keys():
             if siape in staff.keys():
-                staff[siape]["usual"] = SEIME[siape]
+                staff[siape]["presenca"] = SEIME[siape]
         for siape in staff.keys():
             staff[siape]["cd"] = {}
             for dt in self.__table():
-                C0 = self.__excused(staff[siape]["break"], dt)
-                C1 = dt in staff[siape]["patch"]
-                if dt in staff[siape]["usual"]:
+                C0 = self.__excused(staff[siape]["ausencia"], dt)
+                C1 = dt in staff[siape]["justificado"]
+                if dt in staff[siape]["presenca"]:
                     staff[siape]["cd"][dt] = self.COD_PRE
                 elif C0 or C1:
                     staff[siape]["cd"][dt] = self.COD_JUS

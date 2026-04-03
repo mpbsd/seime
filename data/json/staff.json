@@ -8,8 +8,8 @@
     "escolaridade": "doutorado",
     "regime juridico": "estatutario",
     "situacao": "ativo permanente",
-    "usual": [],
-    "break": [],
-    "patch": []
+    "presenca": [],
+    "ausencia": [],
+    "justificado": []
   }
 }
